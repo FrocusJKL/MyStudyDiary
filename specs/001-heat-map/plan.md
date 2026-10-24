@@ -178,7 +178,7 @@ Configuración: carpeta `tests/`; se ejecuta con `node --test` desde la raíz; l
 importan `logic-dates.js` y `logic-heatmap.js` vía el puente de D2. Nada de DOM:
 `buildHeatMap` recibe `todayIso` como parámetro y todos los casos pasan fechas fijas
 (recogen el ejemplo del RF con hoy real: sábado 2026-10-24 → ventana desde el lunes
-2026-08-10).
+2026-08-03, 12 semanas incluida la semana en curso).
 
 Casos (cada uno referencia su criterio de aceptación):
 

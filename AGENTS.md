@@ -4,9 +4,12 @@ seguidos. Proyecto didáctico: el código debe poder entenderlo alguien que empi
 programar.
 ## Stack y estructura
 - HTML, CSS y JavaScript puros: sin frameworks, librerías, npm, bundler ni build.
-- `index.html` (estructura), `styles.css` (estilos), `app.js` (lógica y datos).
+- `index.html` (estructura), `styles.css` (estilos), `app.js` (pegamento de interfaz y
+  datos), `logic-dates.js` y `logic-heatmap.js` (lógica pura, código en inglés, sin DOM:
+  constitución nº 3 y nº 6), `tests/heatmap.test.js` (suite `node --test`).
+- Cálculos nuevos: funciones puras en `logic-*.js`; `app.js` solo pinta y guarda.
 - Debe funcionar abriendo `index.html` con doble clic (`file://`): nada de módulos ES
-(`type="module"`), `fetch` a archivos locales ni nada que requiera servidor.
+  (`type="module"`), `fetch` a archivos locales ni nada que requiera servidor.
 ## Convenciones
 - Textos de la interfaz en español.
 - Código simple, nombres descriptivos y comentarios solo donde aporten.
@@ -50,6 +53,9 @@ dejarlo en la memoria.
 - ⚠️ Pregunta antes: crear archivos nuevos, cambiar el formato de los datos guardados.
 - 🚫 Nunca: añadir dependencias, frameworks o un paso de build.
 ## Verificación
-- No hay tests automáticos. Después de cada cambio, verifica con el MCP de ChromeDevTools: abre `index.html`, prueba la funcionalidad, revisa la consola y comprueba lavista móvil. 
+- La lógica se prueba con `node --test` desde la raíz (tests en verde, constitución nº 4:
+  prohibido avanzar en rojo). Después de cada cambio, verifica la interfaz con el MCP de
+  ChromeDevTools: abre `index.html`, prueba la funcionalidad, revisa la consola y
+  comprueba la vista móvil.
 - Para empezar de cero: DevTools → Application → Local Storage → borrar la clave
 `diarioDeEstudio.sesiones`.

@@ -14,31 +14,27 @@ const mejorRachaNumero = document.getElementById("mejor-racha-numero");
 const minutosSemana = document.getElementById("minutos-semana");
 const diasMes = document.getElementById("dias-mes");
 const diasMesTexto = document.getElementById("dias-mes-texto");
+const mapaRejilla = document.getElementById("mapa-rejilla");
 
 // ---------------------------------------------------------------------------
 // Fechas (siempre en la hora local del usuario, nunca en UTC)
 // ---------------------------------------------------------------------------
 
 // Devuelve una fecha como "AAAA-MM-DD" usando el año, mes y día locales.
+// Delegan en logic-dates.js: una única fuente de verdad para las fechas.
 function fechaLocalISO(fecha = new Date()) {
-  const anio = fecha.getFullYear();
-  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
-  const dia = String(fecha.getDate()).padStart(2, "0");
-  return `${anio}-${mes}-${dia}`;
+  return LogicDates.isoFromLocalDate(fecha);
 }
 
-// Convierte "AAAA-MM-DD" en un Date local. Usamos las 12:00 para que los
-// cambios de hora (verano/invierno) no muevan la fecha al día anterior.
+// Convierte "AAAA-MM-DD" en un Date local (a las 12:00, para que los cambios
+// de hora de verano/invierno no muevan el día). Delega en logic-dates.js.
 function textoAFecha(texto) {
-  const [anio, mes, dia] = texto.split("-").map(Number);
-  return new Date(anio, mes - 1, dia, 12);
+  return LogicDates.localDateFromIso(texto);
 }
 
-// Devuelve el día anterior a una fecha "AAAA-MM-DD".
+// Devuelve el día anterior a una fecha "AAAA-MM-DD". Delega en logic-dates.js.
 function diaAnterior(texto) {
-  const fecha = textoAFecha(texto);
-  fecha.setDate(fecha.getDate() - 1);
-  return fechaLocalISO(fecha);
+  return LogicDates.shiftDaysIso(texto, -1);
 }
 
 // Muestra una fecha "AAAA-MM-DD" en formato español, por ejemplo: "lun, 20 oct 2026".
@@ -185,6 +181,30 @@ function calcularDiasMes() {
 }
 
 // ---------------------------------------------------------------------------
+// Mapa de calor
+// ---------------------------------------------------------------------------
+
+// Pinta la rejilla de 12 semanas a partir de la lógica pura de logic-heatmap.js.
+// Cada casilla es un día: nivel 0 (vacío) o niveles 1-4 según minutos del día.
+function mostrarMapa() {
+  const { cells } = LogicHeatMap.buildHeatMap(sesiones, fechaLocalISO());
+  mapaRejilla.innerHTML = "";
+
+  for (const casilla of cells) {
+    const elemento = document.createElement("span");
+    elemento.className = `casilla-mapa nivel-${casilla.level}`;
+
+    // Tooltip nativo solo en casillas con estudio: total del día y fecha en
+    // español, usando el formato horario unificado (RF-4.1, RF-4.2, RF-4.3).
+    if (casilla.hasStudy) {
+      elemento.title = `${formatearMinutos(casilla.minutes)} · ${formatearFecha(casilla.date)}`;
+    }
+
+    mapaRejilla.append(elemento);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Mostrar datos en la página
 // ---------------------------------------------------------------------------
 
@@ -249,6 +269,7 @@ let sesiones = cargarSesiones();
 campoFecha.value = fechaLocalISO();
 
 mostrarRacha();
+mostrarMapa();
 mostrarSesiones();
 
 formulario.addEventListener("submit", (evento) => {
@@ -274,6 +295,7 @@ formulario.addEventListener("submit", (evento) => {
 
   guardarSesiones();
   mostrarRacha();
+  mostrarMapa();
   mostrarSesiones();
 
   formulario.reset();
