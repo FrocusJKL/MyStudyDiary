@@ -3,6 +3,7 @@ Memoria del proyecto entre sesiones. Máximo ~50 líneas: resume o elimina lo qu
 aporte.
 ## Estado actual
 - v1.3 funcionando: registrar sesiones (fecha, tema, minutos), racha actual y mejor racha (la mayor corrida histórica hasta hoy), total de minutos de la semana (lunes–domingo), días del mes con al menos una sesión y lista de sesiones. Datos en localStorage, todo se calcula desde las fechas guardadas.
+- Spec 001 (mapa de calor) en `specs/001-heat-map/spec.md`, v1.1 tras revisión QA: dudas cerradas (leyenda al pie de la tarjeta, formato horario unificado, bordes 25/50/75 % al nivel superior, futuras sin tooltip, recálculo inmediato). Pendiente: plan técnico e implementación.
 ## Decisiones (y por qué)
 - Sin backend ni dependencias: cualquiera debe poder abrirlo con doble clic.
 - Fecha editable en el formulario: permite registrar días pasados y ver la racha crecer.
@@ -18,4 +19,4 @@ aporte.
 - Contraste racha actual → mejor racha: mirar hacia atrás desde hoy ≠ mayor corrida del historial. La actual puede ser 0 y la mejor 3. Probar ambos con huecos de un día.
 - Métricas distintas sobre los mismos días: la racha cuenta el día una vez; los minutos suman todas las sesiones del día. No confundir sesiones con días.
 ## Próximos pasos
-- (vacío por ahora)
+- Escribir el plan técnico de la spec 001 (mapa de calor) y luego implementarla.
