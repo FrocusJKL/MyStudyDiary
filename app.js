@@ -18,6 +18,9 @@ const minutosSemana = document.getElementById("minutos-semana");
 const diasMes = document.getElementById("dias-mes");
 const diasMesTexto = document.getElementById("dias-mes-texto");
 const mapaRejilla = document.getElementById("mapa-rejilla");
+const tituloFormulario = document.getElementById("titulo-formulario");
+const botonFormulario = document.getElementById("boton-formulario");
+const botonCancelar = document.getElementById("boton-cancelar");
 
 // ---------------------------------------------------------------------------
 // Fechas (siempre en la hora local del usuario, nunca en UTC)
@@ -243,6 +246,7 @@ function mostrarSesiones() {
     elemento.className = "sesion";
 
     const info = document.createElement("div");
+    info.className = "sesion-info";
 
     const tema = document.createElement("p");
     tema.className = "sesion-tema";
@@ -256,10 +260,66 @@ function mostrarSesiones() {
     minutos.className = "sesion-minutos";
     minutos.textContent = formatearMinutos(sesion.minutos);
 
+    const acciones = document.createElement("div");
+    acciones.className = "sesion-acciones";
+
+    const controles = document.createElement("div");
+    controles.className = "sesion-controles";
+
+    const botonEditar = document.createElement("button");
+    botonEditar.className = "boton-accion";
+    botonEditar.type = "button";
+    botonEditar.textContent = "Editar";
+    botonEditar.addEventListener("click", () => empezarEdicion(sesion));
+
+    const botonBorrar = document.createElement("button");
+    botonBorrar.className = "boton-accion boton-borrar";
+    botonBorrar.type = "button";
+    botonBorrar.textContent = "Borrar";
+    botonBorrar.addEventListener("click", () => borrarSesion(sesion));
+
+    controles.append(botonEditar, botonBorrar);
     info.append(tema, fecha);
-    elemento.append(info, minutos);
+    acciones.append(minutos, controles);
+    elemento.append(info, acciones);
     listaSesiones.append(elemento);
   }
+}
+
+function actualizarVista() {
+  guardarSesiones();
+  mostrarRacha();
+  mostrarMapa();
+  mostrarSesiones();
+}
+
+function empezarEdicion(sesion) {
+  sesionEnEdicion = sesion.id;
+  campoFecha.value = sesion.fecha;
+  campoTema.value = sesion.tema;
+  campoMinutos.value = sesion.minutos;
+  tituloFormulario.textContent = "Editar sesión";
+  botonFormulario.textContent = "Guardar cambios";
+  botonCancelar.classList.remove("oculto");
+  formulario.scrollIntoView({ behavior: "smooth", block: "start" });
+  campoTema.focus();
+}
+
+function cancelarEdicion() {
+  sesionEnEdicion = null;
+  formulario.reset();
+  campoFecha.value = fechaLocalISO();
+  tituloFormulario.textContent = "Nueva sesión";
+  botonFormulario.textContent = "Guardar sesión";
+  botonCancelar.classList.add("oculto");
+}
+
+function borrarSesion(sesion) {
+  if (!window.confirm(`¿Borrar la sesión «${sesion.tema}»?`)) return;
+
+  sesiones = sesiones.filter((registro) => registro.id !== sesion.id);
+  if (sesionEnEdicion === sesion.id) cancelarEdicion();
+  actualizarVista();
 }
 
 // ---------------------------------------------------------------------------
@@ -267,6 +327,7 @@ function mostrarSesiones() {
 // ---------------------------------------------------------------------------
 
 let sesiones = cargarSesiones();
+let sesionEnEdicion = null;
 
 // La fecha del formulario empieza en hoy, pero se puede cambiar.
 campoFecha.value = fechaLocalISO();
@@ -295,20 +356,29 @@ formulario.addEventListener("submit", (evento) => {
     return;
   }
 
-  sesiones.push({
-    id: Date.now(),
-    fecha,
-    tema,
-    minutos,
-    creadoEn: new Date().toISOString(),
-  });
+  if (sesionEnEdicion !== null) {
+    const sesion = sesiones.find((registro) => registro.id === sesionEnEdicion);
+    if (sesion) {
+      sesion.fecha = fecha;
+      sesion.tema = tema;
+      sesion.minutos = minutos;
+    }
+    cancelarEdicion();
+  } else {
+    sesiones.push({
+      id: Date.now(),
+      fecha,
+      tema,
+      minutos,
+      creadoEn: new Date().toISOString(),
+    });
 
-  guardarSesiones();
-  mostrarRacha();
-  mostrarMapa();
-  mostrarSesiones();
+    formulario.reset();
+    campoFecha.value = fechaLocalISO();
+  }
 
-  formulario.reset();
-  campoFecha.value = fechaLocalISO();
+  actualizarVista();
   campoTema.focus();
 });
+
+botonCancelar.addEventListener("click", cancelarEdicion);

@@ -5,7 +5,7 @@ aporte.
 
 ## Estado actual
 
-- v1.4 funcionando: registrar sesiones, racha actual y mejor racha, minutos de la
+- v1.5 funcionando: registrar, editar y borrar sesiones, racha actual y mejor racha, minutos de la
   semana, días del mes, **mapa de calor de 12 semanas** (espec 001 completa: T1-T5 ✅,
   más etiquetas de día L M X J V S D a la izquierda de la rejilla, añadidas fuera de
   la spec: decorativas, `aria-hidden`, sin tocar la lógica)
@@ -33,6 +33,8 @@ aporte.
 - Deuda declarada: `app.js` sigue en español (la constitución nº 6 manda código en
   inglés); se refactoriza sin cambiar comportamiento en una tarea aparte.
 - Días del mes: días distintos del mes en curso con ≥1 sesión, junto a "esta semana". Se calculan (no se guardan) por el mismo motivo que racha y minutos: evitar desincronización. Sin funciones de fecha nuevas: filtro por texto "AAAA-MM-DD".
+- Edición y borrado: la lista muestra botones por sesión; editar reutiliza el formulario y conserva `id`/`creadoEn`, borrar pide confirmación. Después de cada cambio se recalculan todas las métricas y el mapa.
+- Lista de sesiones: duración y acciones están en una sola fila dentro de una columna derecha fija; el tiempo ocupa un ancho reservado y alineado a la derecha para evitar descuadres con valores como `1 h 22 min`.
 - Diseño "cuaderno": papel cuadriculado, hojas blancas, tinta de bolígrafo (azul para acciones/foco) y la racha marcada con un subrayador amarillo. Sin fuentes externas ni degradados decorativos: la identidad viene de Georgia (serif, web-safe) + system-ui.
 
 ## Aprendizajes y errores a evitar
