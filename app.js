@@ -1,6 +1,9 @@
 // Clave con la que guardamos las sesiones en localStorage.
 const CLAVE = "diarioDeEstudio.sesiones";
 
+// Límite de sesión: 1440 min = 24 h. Una sesión no puede durar más que un día.
+const MAX_MINUTOS_SESION = 1440;
+
 // Elementos de la página.
 const formulario = document.getElementById("formulario");
 const campoFecha = document.getElementById("fecha");
@@ -280,7 +283,14 @@ formulario.addEventListener("submit", (evento) => {
   const minutos = Number(campoMinutos.value);
 
   // El navegador ya valida los campos obligatorios, pero lo comprobamos también.
-  if (!fecha || !tema || !Number.isFinite(minutos) || minutos <= 0) {
+  // La última condición es el límite de las 24 h por día (MAX_MINUTOS_SESION).
+  if (
+    !fecha ||
+    !tema ||
+    !Number.isFinite(minutos) ||
+    minutos <= 0 ||
+    minutos > MAX_MINUTOS_SESION
+  ) {
     formulario.reportValidity();
     return;
   }

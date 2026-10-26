@@ -19,6 +19,10 @@ aporte.
 - Mejor racha y minutos de la semana se calculan (no se guardan): un valor guardado podría quedar desincronizado con los datos reales.
 - "Esta semana" empieza en lunes (ISO 8601, convención española), calculado en local.
 - Fechas futuras no cuentan en ninguna métrica. No se impiden guardarlas (no se pidió restringir el formulario).
+- Límite de 1440 min (24 h) por sesión, a petición del autor: una sesión no puede
+  durar más que un día. Vence en dos sitios: `max="1440"` en el input (mensaje
+  nativo del navegador) y `MAX_MINUTOS_SESION` en la validación de `app.js` al
+  guardar. Sesiones gigantes ya guardadas no se tocan (solo se limita lo nuevo).
 - AGENTS.md se corrigió para describir el código real (clave `diarioDeEstudio.sesiones`,campos `{ id, fecha, tema, minutos, creadoEn }`): la documentación manda sobre el código, pero una doc que no coincide hace que un agente "arregle" el código a lo que dice la doc.
 - Skill local en `.agents/skills/local-dates/SKILL.md`: regla de fechas del proyecto.
 - Mapa de calor (espec 001): lógica pura en `logic-heatmap.js` + `logic-dates.js`
