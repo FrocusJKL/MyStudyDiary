@@ -6,7 +6,9 @@ aporte.
 ## Estado actual
 
 - v1.4 funcionando: registrar sesiones, racha actual y mejor racha, minutos de la
-  semana, días del mes, **mapa de calor de 12 semanas** (espec 001 completa: T1-T5 ✅)
+  semana, días del mes, **mapa de calor de 12 semanas** (espec 001 completa: T1-T5 ✅,
+  más etiquetas de día L M X J V S D a la izquierda de la rejilla, añadidas fuera de
+  la spec: decorativas, `aria-hidden`, sin tocar la lógica)
   y lista de sesiones. Datos en localStorage, todo se calcula desde las fechas guardadas.
 - Spec 001 (mapa de calor) en `specs/001-heat-map/spec.md`, v1.1 tras revisión QA: dudas cerradas (leyenda al pie de la tarjeta, formato horario unificado, bordes 25/50/75 % al nivel superior, futuras sin tooltip, recálculo inmediato). Pendiente: plan técnico e implementación.
 
