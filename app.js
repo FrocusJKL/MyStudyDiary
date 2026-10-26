@@ -251,7 +251,7 @@ function mostrarSesiones() {
 
     const minutos = document.createElement("span");
     minutos.className = "sesion-minutos";
-    minutos.textContent = `${sesion.minutos} min`;
+    minutos.textContent = formatearMinutos(sesion.minutos);
 
     info.append(tema, fecha);
     elemento.append(info, minutos);

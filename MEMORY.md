@@ -34,6 +34,10 @@ aporte.
 ## Aprendizajes y errores a evitar
 
 - Skills de OpenCode: el archivo DEBE llamarse exactamente `SKILL.md` (mayúsculas) si va en su propio directorio; `skill.md` en minúsculas no se detecta y `/skills` no la muestra.
+- Formato horario unificado (`formatearMinutos()`): es el único formato válido para
+  mostrar minutos en la interfaz. En su día la lista de sesiones mostraba "22233
+  min" porque no lo aplicaba; corregido a petición del autor. Cualquier sitio nuevo
+  que pinte minutos debe reutilizarla (ya lo hacen "esta semana" y el mapa).
 - Frontmatter de agentes (`.opencode/agents/*.md`): las claves `resource` y `effect` deben quedar alineadas bajo `action`; si no, el YAML es inválido y OpenCode descarta el agente en silencio (no aparece en /agents). Tras corregir, hace falta recarga completa (`/reload` o reabrir opencode).
 - Contraste racha actual → mejor racha: mirar hacia atrás desde hoy ≠ mayor corrida del historial. La actual puede ser 0 y la mejor 3. Probar ambos con huecos de un día.
 - Métricas distintas sobre los mismos días: la racha cuenta el día una vez; los minutos suman todas las sesiones del día. No confundir sesiones con días.
