@@ -131,7 +131,7 @@ máximo diario) pertenece al **nivel más alto** de los dos que toca.
 
 ### RF-4 Inspección de un día (tooltip)
 
-**Definición**: una casilla *con estudio* es la del día del rango con fecha ≤ hoy y
+**Definición**: una casilla _con estudio_ es la del día del rango con fecha ≤ hoy y
 total T ≥ 1. Los días futuros del rango, aunque existan sesiones con esa fecha en
 los datos, **no** son casillas con estudio (ver RF-7.1).
 

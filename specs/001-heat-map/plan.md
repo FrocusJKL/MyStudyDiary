@@ -22,15 +22,15 @@ reciben `today` como parámetro (RNF-4, constitución nº 3).
 
 ## 2. Archivos: crear / modificar
 
-| Acción | Archivo | Responsabilidad | RF que cubre |
-|---|---|---|---|
-| Crear | `logic-dates.js` | Funciones puras de calendario local, en inglés: convertir `todayIso`→`Date` local (a mediodía, por DST), `Date`→`iso`, restar días con `setDate` (nunca milisegundos), lunes de la semana de una fecha. Exportadas para navegador clásico y Node (ver decisión D2). | RF-1.2, RF-1.3, RF-1.4; borde inferior de RF-7.2 |
-| Crear | `logic-heatmap.js` | Funciones puras del mapa en inglés: suma por día, máximo diario, nivel 0–4, construcción de la rejilla de 84 casillas. Sin DOM ni almacenamiento. | RF-2.1–RF-2.4, RF-3.2, RF-7.2, RF-7.3 |
-| Crear | `tests/heatmap.test.js` | Suite `node --test` (node:test, cero paquetes): ventana y bordes, totales, máximo, tramos de nivel, futuras, fuera de rango, todo-al-máximo, DST. | RF-1.1–RF-1.4, RF-2.1–RF-2.4, RF-3.2, RF-6.2, RF-7.1–RF-7.3 |
-| Modificar | `index.html` | Nueva `section.card` del mapa **entre la tarjeta de resumen (rachas) y "Nueva sesión"**: título, contenedor de la rejilla (12 columnas × 7 días, vacía inicialmente), fila de leyenda al pie; carga de scripts en orden fecha → mapa → app. | RF-5.1 (estructura), RF-6.3 (reconstrucción al cargar) |
-| Modificar | `app.js` | Pegamento mínimo: nueva función `mostrarMapa()` que toma `sesiones` + `fechaLocalISO()` e invoca la lógica pura y pinta casillas + tooltips + leyenda; llamada en el arranque y dentro del `submit`, en el mismo refresco que `mostrarSesiones()` (RF-6.1). Los tres helpers de fecha existentes pasan a delegar en `logic-dates.js` (cuerpo de una línea, comportamiento idéntico). | RF-4.1–RF-4.3, RF-6.1, RF-6.3 |
-| Modificar | `styles.css` | Clases de la rejilla (columnas flexibles, casillas cuadradas), 5 clases de nivel (`level-0`…`level-4`) con la rampa naranja sobre el papel del diseño "cuaderno", leyenda de 5 muestras + textos "menos"/"más", tamaño de casilla con variable CSS que cabe en 375 px. | RF-3.1, RF-5.1, RF-5.2, RNF-1, RNF-2 |
-| Modificar | `AGENTS.md` / `MEMORY.md` | Al terminar: estado v1.4 en MEMORY y decisiones (nuevos archivos credados, delegación de fechas, código nuevo en inglés). | — |
+| Acción    | Archivo                   | Responsabilidad                                                                                                                                                                                                                                                                                                                                                                      | RF que cubre                                                |
+| --------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| Crear     | `logic-dates.js`          | Funciones puras de calendario local, en inglés: convertir `todayIso`→`Date` local (a mediodía, por DST), `Date`→`iso`, restar días con `setDate` (nunca milisegundos), lunes de la semana de una fecha. Exportadas para navegador clásico y Node (ver decisión D2).                                                                                                                  | RF-1.2, RF-1.3, RF-1.4; borde inferior de RF-7.2            |
+| Crear     | `logic-heatmap.js`        | Funciones puras del mapa en inglés: suma por día, máximo diario, nivel 0–4, construcción de la rejilla de 84 casillas. Sin DOM ni almacenamiento.                                                                                                                                                                                                                                    | RF-2.1–RF-2.4, RF-3.2, RF-7.2, RF-7.3                       |
+| Crear     | `tests/heatmap.test.js`   | Suite `node --test` (node:test, cero paquetes): ventana y bordes, totales, máximo, tramos de nivel, futuras, fuera de rango, todo-al-máximo, DST.                                                                                                                                                                                                                                    | RF-1.1–RF-1.4, RF-2.1–RF-2.4, RF-3.2, RF-6.2, RF-7.1–RF-7.3 |
+| Modificar | `index.html`              | Nueva `section.card` del mapa **entre la tarjeta de resumen (rachas) y "Nueva sesión"**: título, contenedor de la rejilla (12 columnas × 7 días, vacía inicialmente), fila de leyenda al pie; carga de scripts en orden fecha → mapa → app.                                                                                                                                          | RF-5.1 (estructura), RF-6.3 (reconstrucción al cargar)      |
+| Modificar | `app.js`                  | Pegamento mínimo: nueva función `mostrarMapa()` que toma `sesiones` + `fechaLocalISO()` e invoca la lógica pura y pinta casillas + tooltips + leyenda; llamada en el arranque y dentro del `submit`, en el mismo refresco que `mostrarSesiones()` (RF-6.1). Los tres helpers de fecha existentes pasan a delegar en `logic-dates.js` (cuerpo de una línea, comportamiento idéntico). | RF-4.1–RF-4.3, RF-6.1, RF-6.3                               |
+| Modificar | `styles.css`              | Clases de la rejilla (columnas flexibles, casillas cuadradas), 5 clases de nivel (`level-0`…`level-4`) con la rampa naranja sobre el papel del diseño "cuaderno", leyenda de 5 muestras + textos "menos"/"más", tamaño de casilla con variable CSS que cabe en 375 px.                                                                                                               | RF-3.1, RF-5.1, RF-5.2, RNF-1, RNF-2                        |
+| Modificar | `AGENTS.md` / `MEMORY.md` | Al terminar: estado v1.4 en MEMORY y decisiones (nuevos archivos credados, delegación de fechas, código nuevo en inglés).                                                                                                                                                                                                                                                            | —                                                           |
 
 Los archivos nuevos exigen aprobación previa (AGENTS.md): aprobar este plan la incluye.
 
@@ -40,37 +40,37 @@ Los archivos nuevos exigen aprobación previa (AGENTS.md): aprobar este plan la 
   Constitución nº 3 (funciones puras) + nº 4 (`node --test`): los tests deben cargar la
   lógica sin DOM, y `app.js` ejecuta `document.getElementById` al arrancar, así que no
   puede cargarse en Node.
-  *Descartada*: meter la lógica en `app.js` (obligaría a refactorizar todo el arranque
+  _Descartada_: meter la lógica en `app.js` (obligaría a refactorizar todo el arranque
   o saltarse los tests, contradiciendo la constitución).
 - **D2 — Scripts clásicos con "puente" para Node**: los archivos de lógica son IIFE
   clásicas que cuelgan de un objeto global del navegador y, si `module` existe, se
   exportan con `module.exports`. Sin `type="module"`.
-  *Descartada*: módulos ESM — `file://` los bloquea por CORS
+  _Descartada_: módulos ESM — `file://` los bloquea por CORS
   e invalidaría el doble clic (constitución nº 1).
 - **D3 — Rejilla DOM (divs/flex) para pintar** el mapa: columnas flex, casillas
   cuadradas con clase por nivel.
-  *Descartadas*: Canvas/SVG (más código, menos accesible, tooltip nativo más difícil y
+  _Descartadas_: Canvas/SVG (más código, menos accesible, tooltip nativo más difícil y
   el CSS responsive del RNF-1 gratis con divs).
 - **D4 — Niveles como clases CSS fijas** (`level-0`…`level-4`) con la rampa naranja
   prevista: colores idénticos siempre (RF-5.2, leyenda estable) y verificables.
-  *Descartada*: opacidad/filtros derivados del máximo (los colores "flotarían" y la
+  _Descartada_: opacidad/filtros derivados del máximo (los colores "flotarían" y la
   leyenda no sería fija).
 - **D5 — Código nuevo en inglés (constitución nº 6)**: identificadores y comentarios
   de `logic-*.js` y `tests/` en inglés; los textos de la interfaz (tooltip, leyenda)
   siguen en español y viven en la capa de interfaz.
-  *Descartada*: seguir el estilo español de `app.js` — contradiría la constitución,
+  _Descartada_: seguir el estilo español de `app.js` — contradiría la constitución,
   que manda; mantener nota posterior para refactor de idioma de `app.js` fuera de
   alcance (deuda declarada, sin cambio de comportamiento esta iteración).
 - **D6 — Delegación de fechas**: `logic-dates.js` pasa a ser la única fuente de
   conversión/resta de fechas; los helpers de `app.js` delegan en ella (misma firma).
-  *Descartada*: duplicar los helpers dentro de `logic-heatmap.js` — dos fuentes de
+  _Descartada_: duplicar los helpers dentro de `logic-heatmap.js` — dos fuentes de
   verdad de fecha = deriva futura; la skill `local-dates` pide reutilizar.
 - **D7 — El máximo diario y el nivel se calculan por guardado y a la carga**, nunca
-  guardados (RF-2.2, RF-6.3, decisiones Ya registradas). *Ninguna* alternativa posible
+  guardados (RF-2.2, RF-6.3, decisiones Ya registradas). _Ninguna_ alternativa posible
   en spec; se mantiene.
 - **D8 — Ubicación del mapa**: tarjeta propia tras el resumen de rachas (zona de
   métricas) y antes del formulario; leyenda al pie de esa misma tarjeta (cierre de
-  duda 1). *Descartada*: dentro de la tarjeta de rachas (la taparía al crecer el
+  duda 1). _Descartada_: dentro de la tarjeta de rachas (la taparía al crecer el
   historial) o tras la lista (el mapa es motivación, no histórico de detalle).
 
 ## 4. Funciones puras de la lógica (con `today` como parámetro)
@@ -163,7 +163,7 @@ heatMapLevel(t, max):
   (paleta 🔥 de la regla de la app) hasta el tono fuerte. La leyenda usa las mismas
   clases: los colores son literalmente los mismos (RF-5.2).
 - **Tooltip (RF-4)**: cada casilla con estudio recibe `title =
-  formatearMinutos(total_del_día) + " · " + formatearFecha(fecha)` (funciones
+formatearMinutos(total_del_día) + " · " + formatearFecha(fecha)` (funciones
   existentes de `app.js`, textos en español — ejemplo: "1 h 15 min · sáb, 24 oct
   2026"). Las casillas sin estudio ni tooltip (RF-4.2).
 - **Leyenda (RF-5.1)**: 5 casillas muestra (las clases de nivel) entre los textos
